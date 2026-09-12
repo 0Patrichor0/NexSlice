@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+
+metadata:
+  name: nexslice-auto-apps
+  namespace: argocd
+
+spec:
+
+  goTemplate: true
+
+  generators:
+
+    - git:
+
+        repoURL: https://github.com/0Patrichor0/NexSlice.git
+        revision: main
+
+        files:
+
+          - path: "**/argocd-app.yaml"
+
+  template:
+
+    metadata:
+
+      name: "{{.name}}"
+
+    spec:
+
+      project: default
+
+      source:
+
+        repoURL: https://github.com/0Patrichor0/NexSlice.git
+
+        targetRevision: main
+
+        path: "{{.path}}"
+
+      destination:
+
+        server: https://kubernetes.default.svc
+
+        namespace: "{{.namespace}}"
+
+      syncPolicy:
+
+        automated:
+
+          prune: true
+
+          selfHeal: true
+
+        syncOptions:
+
+          - CreateNamespace=true

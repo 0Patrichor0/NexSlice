@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ueransim-gnb
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/0patrichor0/NexSlice.git
+    targetRevision: main
+    path: 5g_ran/ueransim-gnb2
+
+    helm:
+      releaseName: ueransim-gnb
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nexslice
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
