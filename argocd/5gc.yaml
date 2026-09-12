@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nexslice-5gc
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/0patrichor0/NexSlice.git
+    targetRevision: main
+    path: 5g_core/oai-5g-advance
+
+    helm:
+      releaseName: 5gc
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nexslice
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
